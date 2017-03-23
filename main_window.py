@@ -37,4 +37,16 @@ about_menu.add_command(label='Editor')
 about_menu.add_command(label='Copyright')
 menuBar.add_cascade(label='About', menu=about_menu)
 
+# Toolbar
+toolBar = Frame(root, height=25, bg='grey')
+buttonOpen = Button(toolBar, text='Open')
+buttonOpen.pack(side=LEFT, padx=5, pady=5)
+buttonSave = Button(toolBar, text='Save')
+buttonSave.pack(side=LEFT)
+toolBar.pack(expand=NO, fill=X)
+
+# Status bar
+status = Label(root, text='Status: ok', bd=1, relief='sunken', anchor=W)
+status.pack(side=BOTTOM, fill=X)
+
 root.mainloop()
