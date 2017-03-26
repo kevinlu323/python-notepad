@@ -4,7 +4,7 @@ from tkinter import *
 
 root = Tk()
 root.title('python notepad')
-root.geometry('700x500+100+100')
+root.geometry('800x500+100+100')
 
 # Add Menu
 menuBar = Menu(root)
@@ -48,5 +48,19 @@ toolBar.pack(expand=NO, fill=X)
 # Status bar
 status = Label(root, text='Status: ok', bd=1, relief='sunken', anchor=W)
 status.pack(side=BOTTOM, fill=X)
+
+# line number
+lnLabel = Label(root, width=2, bg='antique white')
+lnLabel.pack(side=LEFT, fill=Y)
+
+# text area
+textArea = Text(root, undo=True)
+textArea.pack(expand=YES, fill=BOTH)
+
+# scroll bar for text area
+scrollBar = Scrollbar(textArea)
+textArea.config(yscrollcommand=scrollBar.set)
+scrollBar.config(command=textArea.yview)
+scrollBar.pack(side=RIGHT, fill=Y)
 
 root.mainloop()
