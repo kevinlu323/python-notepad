@@ -1,9 +1,19 @@
 # -*- encoding: utf-8 -*-
 
 from tkinter import *
+from tkinter import messagebox
+
+
+def showAuthor():
+    messagebox.showinfo('Author', 'Author is ...')
+
+
+def showVersionInfo():
+    messagebox.showinfo('About', 'Python Notepad beta V0.1')
+
 
 root = Tk()
-root.title('python notepad')
+root.title('Python Notepad')
 root.geometry('800x500+100+100')
 
 # Add Menu
@@ -33,8 +43,8 @@ menuBar.add_cascade(label='Edit', menu=editMenu)
 
 # About menu
 about_menu = Menu(menuBar)
-about_menu.add_command(label='Editor')
-about_menu.add_command(label='Copyright')
+about_menu.add_command(label='Author', command=showAuthor)
+about_menu.add_command(label='About', command=showVersionInfo)
 menuBar.add_cascade(label='About', menu=about_menu)
 
 # Toolbar
