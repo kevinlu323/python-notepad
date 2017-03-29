@@ -2,9 +2,11 @@
 
 from tkinter import *
 from tkinter import messagebox, filedialog
+from functools import partial
 import os
 
 fileName = None
+
 
 def showAuthor():
     messagebox.showinfo('Author', 'Author is ...')
@@ -12,6 +14,7 @@ def showAuthor():
 
 def showVersionInfo():
     messagebox.showinfo('About', 'Python Notepad beta V0.1')
+
 
 def openFile():
     global fileName
@@ -24,6 +27,7 @@ def openFile():
                 textArea.insert(1.0, f.read())
             except Exception as e:
                 messagebox.showinfo('Error', 'Error while open file, cannot read file')
+
 
 def saveContent():
     global fileName
@@ -44,26 +48,66 @@ def saveContentAs():
             f.write(msg)
         root.title('File: ' + os.path.abspath(fileName))
 
+
 def newNote():
     global fileName
     fileName = None
     root.title('new note')
     textArea.delete(1.0, END)
 
+
 def copyText():
     textArea.event_generate('<<Copy>>')
+
 
 def cutText():
     textArea.event_generate('<<Cut>>')
 
+
 def pasteText():
     textArea.event_generate('<<Paste>>')
+
 
 def undoOperation():
     textArea.event_generate('<<Undo>>')
 
+
 def redoOperation():
     textArea.event_generate('<<Redo>>')
+
+
+def selectAll():
+    textArea.tag_add('sel', '1.0', END)
+
+
+def searchText(textEntry):
+    # tmpStr='hello'
+    textToSearch = textEntry.get()
+    print(textToSearch)
+    start = '1.0'
+    while True:
+        pos = textArea.search(textToSearch, start, END)
+        if not pos:
+            break
+        print(pos)
+        start = pos + ('+' + str(len(textToSearch)) + 'c')
+        print('new start:%s' % str(start))
+        textArea.tag_add('sel', pos, start)
+
+
+def searchContent():
+    searchTop = Toplevel(root)
+    searchTop.geometry('300x30+200+250')
+    Label1 = Label(searchTop, text='Search text:')
+    Label1.grid(row=0, column=0, padx=5, pady=5)
+    textEntry = Entry(searchTop, width=20)
+    textEntry.grid(row=0, column=1, padx=5)
+    searchFunc = partial(searchText, textEntry=textEntry)
+    button1 = Button(searchTop, text='Search', command=searchFunc)
+    button1.grid(row=0, column=2, padx=5)
+
+    pass
+
 
 root = Tk()
 root.title('Python Notepad')
@@ -90,8 +134,8 @@ editMenu.add_command(label='Cut', accelerator='Ctrl + X', command=cutText)
 editMenu.add_command(label='Copy', accelerator='Ctrl + C', command=copyText)
 editMenu.add_command(label='Paste', accelerator='Ctrl + V', command=pasteText)
 editMenu.add_separator()
-editMenu.add_command(label='Search', accelerator='Ctrl + F')
-editMenu.add_command(label='Select All', accelerator='Ctrl + A')
+editMenu.add_command(label='Search', accelerator='Ctrl + F', command=searchContent)
+editMenu.add_command(label='Select All', accelerator='Ctrl + A', command=selectAll)
 menuBar.add_cascade(label='Edit', menu=editMenu)
 
 # About menu
@@ -107,7 +151,6 @@ buttonOpen.pack(side=LEFT, padx=5, pady=2)
 buttonSave = Button(toolBar, text='Save', command=saveContent)
 buttonSave.pack(side=LEFT)
 toolBar.pack(expand=NO, fill=X)
-
 
 textPanel = PanedWindow(root, orient=HORIZONTAL, height=80)
 
