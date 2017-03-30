@@ -7,7 +7,6 @@ import os
 
 fileName = None
 
-
 def showAuthor():
     messagebox.showinfo('Author', 'Author is ...')
 
@@ -80,19 +79,18 @@ def selectAll():
     textArea.tag_add('sel', '1.0', END)
 
 
-def searchText(textEntry):
-    # tmpStr='hello'
+def searchText(textEntry, searchTop):
+    textArea.tag_delete('sel')
     textToSearch = textEntry.get()
-    print(textToSearch)
     start = '1.0'
     while True:
         pos = textArea.search(textToSearch, start, END)
         if not pos:
             break
-        print(pos)
         start = pos + ('+' + str(len(textToSearch)) + 'c')
-        print('new start:%s' % str(start))
         textArea.tag_add('sel', pos, start)
+    # close search Toplevel widget
+    searchTop.destroy()
 
 
 def searchContent():
@@ -102,9 +100,10 @@ def searchContent():
     Label1.grid(row=0, column=0, padx=5, pady=5)
     textEntry = Entry(searchTop, width=20)
     textEntry.grid(row=0, column=1, padx=5)
-    searchFunc = partial(searchText, textEntry=textEntry)
+    searchFunc = partial(searchText, textEntry=textEntry, searchTop=searchTop)
     button1 = Button(searchTop, text='Search', command=searchFunc)
     button1.grid(row=0, column=2, padx=5)
+    textEntry.focus()
 
     pass
 
