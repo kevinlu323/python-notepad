@@ -7,6 +7,7 @@ import os
 
 fileName = None
 
+
 def showAuthor():
     messagebox.showinfo('Author', 'Author is ...')
 
@@ -82,6 +83,11 @@ def selectAll():
 def searchText(textEntry, searchTop):
     textArea.tag_delete('sel')
     textToSearch = textEntry.get()
+    # Show error messagebox if user enters nothing to search
+    if not textToSearch or textToSearch.strip() == '':
+        searchTop.destroy()
+        messagebox.showinfo('Error', 'Please enter the content to be searched!')
+        return
     start = '1.0'
     while True:
         pos = textArea.search(textToSearch, start, END)
@@ -91,6 +97,8 @@ def searchText(textEntry, searchTop):
         textArea.tag_add('sel', pos, start)
     # close search Toplevel widget
     searchTop.destroy()
+    # Focus on the Text widget
+    textArea.focus()
 
 
 def searchContent():
