@@ -81,13 +81,16 @@ def selectAll():
 
 
 def searchText(textEntry, searchTop):
+    # Before each search, clear previous selection tag
     textArea.tag_delete('sel')
     textToSearch = textEntry.get()
+
     # Show error messagebox if user enters nothing to search
     if not textToSearch or textToSearch.strip() == '':
         searchTop.destroy()
         messagebox.showinfo('Error', 'Please enter the content to be searched!')
         return
+
     start = '1.0'
     while True:
         pos = textArea.search(textToSearch, start, END)
@@ -95,7 +98,12 @@ def searchText(textEntry, searchTop):
             break
         start = pos + ('+' + str(len(textToSearch)) + 'c')
         textArea.tag_add('sel', pos, start)
-    # close search Toplevel widget
+
+    # Show messagebox if content not found
+    if not pos and start == '1.0':
+        messagebox.showinfo('Not Found!', 'Content not found!')
+
+    # Close search Toplevel widget
     searchTop.destroy()
     # Focus on the Text widget
     textArea.focus()
