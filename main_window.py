@@ -100,7 +100,7 @@ def searchText(textEntry, searchTop):
         textArea.tag_add('sel', pos, start)
 
     # Show messagebox if content not found
-    if not pos and start == '1.0':
+    if start == '1.0':
         messagebox.showinfo('Not Found!', 'Content not found!')
 
     # Close search Toplevel widget
