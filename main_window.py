@@ -82,8 +82,10 @@ def selectAll():
 
 def searchText(textEntry, searchTop):
     # Before each search, clear previous selection tag
-    textArea.tag_delete('sel')
+    textArea.tag_delete('highlightText')
     textToSearch = textEntry.get()
+    # Config a tag to highlight search results
+    textArea.tag_config('highlightText', background='yellow')
 
     # Show error messagebox if user enters nothing to search
     if not textToSearch or textToSearch.strip() == '':
@@ -97,7 +99,7 @@ def searchText(textEntry, searchTop):
         if not pos:
             break
         start = pos + ('+' + str(len(textToSearch)) + 'c')
-        textArea.tag_add('sel', pos, start)
+        textArea.tag_add('highlightText', pos, start)
 
     # Show messagebox if content not found
     if start == '1.0':
