@@ -5,6 +5,9 @@ import os
 
 
 class NotePadApp(Frame):
+    """
+    Frame class for the notepad app
+    """
     def __init__(self, master=None):
         super().__init__(master=master)
         self.pack()
@@ -47,7 +50,7 @@ class NotePadApp(Frame):
 
         # Create a PanedWindow for all widgets
         self.parentPanel = PanedWindow(orient=VERTICAL)
-        self.parentPanel.pack(expand=YES, fill=BOTH)
+        self.parentPanel.pack(expand=1, fill=BOTH)
 
         # Toolbar
         self.toolBar = Frame(self.parentPanel, height=5, bg='grey')
@@ -56,39 +59,39 @@ class NotePadApp(Frame):
         self.buttonSave = Button(self.toolBar, text='Save', command=self.saveContent)
         self.buttonSave.pack(side=LEFT)
         # self.toolBar.pack(expand=YES, fill=X)
-        self.parentPanel.add(self.toolBar, minsize=30)
+        self.parentPanel.add(self.toolBar, stretch="never")
 
         self.textPanel = PanedWindow(self.parentPanel, orient=HORIZONTAL)
         # self.textPanel.pack(expand=1, fill=BOTH)
 
         # line number
-        self.lnLabel = Label(self.textPanel, width=2, bg='antique white')
-        # self.lnLabel.pack(side=LEFT, fill=Y)
+        self.lnLabel = Label(self.textPanel, bg='antique white', width=4)
+        # self.lnLabel.pack(expand=0, fill=Y)
         # self.lnLabel.grid(row=0, column=0)
 
         # text area
         self.textArea = Text(self.textPanel, undo=True, font=('Consolas', 16))
-        # self.textArea.pack(side=LEFT, expand=YES, fill=BOTH)
+        self.textArea.pack(expand=1, fill=BOTH)
         # self.textArea.grid(row=0, column=1)
 
         # scroll bar for text area
-        self.scrollBar = Scrollbar(self.textPanel, width=15)
+        self.scrollBar = Scrollbar(self.textPanel)
         self.textArea.config(yscrollcommand=self.scrollBar.set)
         self.scrollBar.config(command=self.textArea.yview)
         # self.textPanel.paneconfigure(self.scrollBar, minsize=40)
-        # self.scrollBar.pack(side=LEFT, expand=0, fill=Y)
+        # self.scrollBar.pack(expand=0, fill=Y)
         # self.scrollBar.grid(row=0, column=2)
 
-        self.textPanel.add(self.lnLabel, minsize=15)
-        self.textPanel.add(self.textArea, width=760, height=440)
-        self.textPanel.add(self.scrollBar, minsize=15)
+        self.textPanel.add(self.lnLabel, stretch="never")
+        self.textPanel.add(self.textArea, stretch="always")
+        self.textPanel.add(self.scrollBar, stretch="never")
 
-        self.parentPanel.add(self.textPanel)
+        self.parentPanel.add(self.textPanel, stretch="always")
 
         # Status bar
         self.status = Label(self.parentPanel, text='Status: ok', bd=1, relief='sunken', anchor=W)
         # self.status.pack(fill=X)
-        self.parentPanel.add(self.status, minsize=15)
+        self.parentPanel.add(self.status, stretch="never")
 
     def showAuthor(self):
         messagebox.showinfo('Author', 'Author is ...')
@@ -105,7 +108,8 @@ class NotePadApp(Frame):
                 try:
                     self.textArea.insert(1.0, f.read())
                 except Exception as e:
-                    messagebox.showinfo('Error', 'Error while open file, cannot read file')
+                    messagebox.showinfo('Error', 'Error while open file, cannot read file:\n%s' % e)
+                    self.newNote()
 
     def saveContent(self):
         if not self.fileName:
@@ -125,7 +129,7 @@ class NotePadApp(Frame):
 
     def newNote(self):
         self.fileName = None
-        self.master.title('new note')
+        self.master.title('Python Notepad App')
         self.textArea.delete(1.0, END)
 
     def copyText(self):
